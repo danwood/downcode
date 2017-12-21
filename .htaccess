@@ -1,0 +1,4 @@
+<FilesMatch \.html$>
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
