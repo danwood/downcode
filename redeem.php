@@ -9,10 +9,6 @@ $code = isset($_POST['code']) ? htmlspecialchars($_POST['code']) : '';
 $email = isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '';
 
 $db = new DowncodeDB();
-// $formats = $db->formats();
-// foreach ($formats as $entry) {
-// 	echo $entry['extension'] . ' ... ' . $entry['description'] . PHP_EOL;
-// }
 
 $album = $db->findAndRedeemAlbumFromCode($code, $iOSDevice);
 
@@ -23,16 +19,27 @@ if ($album) {
 <img src="albums/<?php echo htmlspecialchars($album['imageName']); ?>" alt="<?php echo htmlspecialchars($album['title']); ?>" />
 <form id="downloader">
 	<input type="hidden" name="albumID" value="<?php echo $album['ID']; ?>" />
+	<input type="hidden" name="code" value="<?php echo $code; ?>" />
 	<table border="1">
+<?php
+	if (!$iOSDevice) {
+?>
 		<tr><td colspan="3"><button type="button" class="download" name="track" value="0">Download all</button></td></tr>
 <?php
+	}
 	$tracks = $db->tracksOfAlbumID($album['ID']);
 	foreach ($tracks as $track) {
 ?>
 		<tr>
 			<td><?php echo $track['trackNumber']; ?></td>
 			<td><?php echo htmlspecialchars($track['title']); ?></td>
+<?php
+	if (!$iOSDevice) {
+?>
 			<td><button type="button" class="download" name="track" value="<?php echo $track['trackNumber']; ?>">Download</button></td>	<!-- use fileBase -->
+<?php
+	}
+?>
 		</tr>
 <?php
 }
@@ -41,17 +48,18 @@ if ($album) {
 <?php
 if (!$iOSDevice) {
 	echo '<h2>Format:</h2>' . PHP_EOL;
-	echo '<select name="format">' . PHP_EOL;
+	echo '<select name="formatID">' . PHP_EOL;
 	$formats = $db->formats();
 	foreach ($formats as $format) {
-		echo '<option value="' . $format['extension'] . '"';
+		echo '<option value="' . $format['ID'] . '"';
+		echo ' data-extension="' . $format['extension'] . '"';	// not really used, but maybe a script could populate something?
 		if (isset($album['formatID']) && $album['formatID'] == $format['ID']) {
-			echo ' selected data-previous-format="' . $album['formatID'] . '"';
+			echo ' data-previous-format="' . $album['formatID'] . '" selected';
 		}
 		else if (!isset($album['formatID'])
 			&& isset($format['platform_preg'])
 			&& preg_match($format['platform_preg'], $userAgent, $matches)) {
-			echo ' selected data-platform="' . $matches[0] . '"';
+			echo ' data-platform="' . $matches[0] . '" selected';
 		}
 		echo '>' . htmlspecialchars($format['description']) . '</option>' . PHP_EOL;
 	}
@@ -73,23 +81,23 @@ $('button.download').click(function (evt) {
         + '&'
         + encodeURI(button.attr('name'))
         + '='
-        + encodeURI(button.attr('value'))
-    ;
+        + encodeURI(button.attr('value'));
 
-	alert(serialized);
     $.ajax({
       type: 'POST',
       url: '/download.php',
       data: serialized,
 
       success: function(data, textStatus, jqXHR ) {
-
+      	data = data.trim();
+      	if ('' === data) {
+      		alert('Unable to download. Probably an error with the website!');
+      	}
       },
       error: function(jqXHR, textStatus, errorThrown ) {
             alert(errorThrown + ' ' + textStatus);
       },
       complete: function(jqXHR, textStatus ) {
-
       }
     });
 

@@ -260,10 +260,22 @@ class DowncodeDB extends SQLite3
   function formats() {
 
     $result = Array();
-    $query = 'select * from format order by ordering';
+    $query = 'SELECT * FROM format ORDER BY ordering';
     $ret = $this->query($query);
     while ($row = $ret->fetchArray(SQLITE3_ASSOC) ){
       $result[] = $row;
+    }
+    return $result;
+  }
+
+  function formatExtensionFromID($formatID)
+  {
+    $result = NULL;
+    $statement = $this->prepare('SELECT extension FROM format WHERE id=:formatID;');
+    $statement->bindValue(':formatID', $formatID);
+    $ret = $statement->execute();
+    if ($row = $ret->fetchArray(SQLITE3_ASSOC) ){
+      $result = $row['extension'];
     }
     return $result;
   }
@@ -353,7 +365,7 @@ class DowncodeDB extends SQLite3
     return null;
   }
 
-  public function tracksOfAlbumID($albumID) {
+  function tracksOfAlbumID($albumID) {
 
     $result = Array();
     $statement = $this->prepare('SELECT * FROM track WHERE albumID = :albumID;');
@@ -361,6 +373,31 @@ class DowncodeDB extends SQLite3
     $ret = $statement->execute();
     while ($track = $ret->fetchArray(SQLITE3_ASSOC) ){
       $result[] = $track;
+    }
+    return $result;
+  }
+
+  function fileNameForAlbumTrackExtension($albumID, $trackNumber, $formatID)
+  {
+    $result = NULL;
+    $extension = $this->formatExtensionFromID($formatID);
+
+    if (0 == $trackNumber) {
+      // special case, entire album
+      $statement = $this->prepare('SELECT * FROM album WHERE id = :albumID');
+      $statement->bindValue(':albumID', $albumID);
+      $ret = $statement->execute();
+      if ($track = $ret->fetchArray(SQLITE3_ASSOC) ){
+        $result = $track['zipFileBase'] . '.' . $extension . '.zip';
+      }
+    } else {
+      $statement = $this->prepare('SELECT * FROM track WHERE albumID = :albumID AND trackNumber = :trackNumber;');
+      $statement->bindValue(':albumID', $albumID);
+      $statement->bindValue(':trackNumber', $trackNumber);
+      $ret = $statement->execute();
+      if ($track = $ret->fetchArray(SQLITE3_ASSOC) ){
+        $result = $track['fileBase'] . '.' . $extension;
+      }
     }
     return $result;
   }
@@ -403,64 +440,28 @@ However, due to the second character acting as a salt, we now have the ability t
   }
 
 
+  public static function passThruAttachment($path, $name='')
+  {
+    if (empty($name))
+    {
+      $name = housekeeping::lastPathComponent($path);
+    }
+
+    $fp = fopen($path, 'rb');
+
+    // send the right headers
+    header("Content-Type: application/zip");
+    header("Content-Length: " . filesize($path));
+    header('Content-Disposition: attachment; filename="' . $name . '"');
+    header("Content-Description: File Transfer");
+    header("Cache-Control: public");
+    header("Content-Transfer-Encoding: binary");
+
+    // dump the picture and stop the script
+    fpassthru($fp);
+  }
 
 
 
 }
 
-
-/*
-  $dbPath = DOWNCODE_DBDIR . '/downcode.sqlite3';
-  $db = new SQLite3($dbPath) or die('Unable to open database');
-
-  $query = 'select * from events';
-
-  die;
-  }
-  while ($row = $ret->fetchArray(SQLITE3_ASSOC) ){
-  $query = 'update events set ' . $propertyName . ' = ';
-  $query .= "'" . SQLite3::escapeString($maxFilename) . "'";
-  $query .= ' where id=' . $id;
-   while ($row = $ret->fetchArray(SQLITE3_ASSOC) ){
-
-       $event = new Event($row);       // Copy the event, work with that.
-
-               $value = datetimeTo8601($value);
-           }
-           $query .= "'" . SQLite3::escapeString($value) . "',";
-       }
-   }
-
-           $valuesList .= "'" . SQLite3::escapeString($value) . "',";
-
-
-
-    $valuesList = '';
-    $query = 'insert into events (';
-    foreach ($inputs as $key => $value) {
-        if (!endswith($key, '_time')) {
-            $query .= $key . ',';
-
-            if (endswith($key, 'Date')) {
-                $value = dateTo8601($value);
-            } else if (endswith($key, 'DateTime') || endswith(substr($key,0,-1), 'DateTime')) {
-                $value = datetimeTo8601($value);
-            }
-
-            $valuesList .= "'" . SQLite3::escapeString($value) . "',";
-        }
-    }
-    $query = substr($query, 0, -1); // take out last ,
-    $query .= ') values(';
-    $query .= $valuesList;
-    $query = substr($query, 0, -1); // take out last ,
-    $query .= ')';
-
-    $ret = $db->query($query);
-    if(!$ret) {
-        echo $db->lastErrorMsg();
-        die;
-    }
-    $id = $db->lastInsertRowID();
-
-*/
