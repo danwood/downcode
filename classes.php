@@ -76,7 +76,7 @@ class Crockford
      *
      * @throws \RuntimeException
      */
-    public function encode($number)
+    public function encode($number, $padding=0)
     {
         if (!is_numeric($number)) {
             throw new \RuntimeException("Specified number '{$number}' is not numeric");
@@ -86,11 +86,13 @@ class Crockford
             return 0;
         }
 
+        $digits = 0;
         $response = array();
-        while ($number) {
+        while ($number || ($padding > 0 && $digits < $padding)) { // go until run out, or padding done
             $remainder = $number % 32;
             $number = (int) ($number/32);
             $response[] = $this->symbols[$remainder];
+            $digits++;
         }
 
         return implode('', array_reverse($response));
@@ -290,8 +292,7 @@ Looks like we can generate about 15,000 8-character codes (6 characters is a num
       $seed = $result['seed'];
       $prefix = $result['prefix'];
       for ($i = 1 ; $i < 100000 ; $i++) {
-        $fullCode = $prefix . $secondChar . $base32Converter->encode($i * $seed );
-        if (strlen($fullCode) < 8) continue;
+        $fullCode = $prefix . $secondChar . $base32Converter->encode($i * $seed, 6 );
         if (strlen($fullCode) > 8) break;
         echo /* 'For basis ' . $i . ' -> ' . $i * $seed . ' : ' . */ $fullCode /* . ' ===== ' . $base32Converter->decode(substr($fullCode, 2)) */ . PHP_EOL;
         $counter++;
