@@ -10,8 +10,13 @@ $email = isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '';
 echo "<h1>submit code</h1><p>$code with email address: $email</p>";
 
 $db = new DowncodeDB();
-$formats = $db->formats();
-foreach ($formats as $entry) {
-	echo $entry['extension'] . ' ... ' . $entry['description'] . PHP_EOL;
-}
+// $formats = $db->formats();
+// foreach ($formats as $entry) {
+// 	echo $entry['extension'] . ' ... ' . $entry['description'] . PHP_EOL;
+// }
+
+$album = $db->findAlbumFromCode($code);
+print_r($album);
+
+
 ?>
