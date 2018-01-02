@@ -10,7 +10,10 @@
 // Please see https://bitbucket.org/phpliteadmin/public/wiki/Configuration for more details
 
 //password to gain access
-require_once('../downcode_db/secrets.php');
+// Temporarily don't use $_SERVER['DOCUMENT_ROOT'] - based database.
+define(DROPBOX_DIR,      dirname(__FILE__)  . '/../../Dropbox');
+define(DROPBOX_RESOLVED, is_link(DROPBOX_DIR) ? readlink(DROPBOX_DIR) : DROPBOX_DIR);
+include_once(DROPBOX_RESOLVED . '/downcode_db/secrets.php');    // $password
 
 //directory relative to this file to search for databases (if false, manually list databases in the $databases variable)
 $directory = false;
@@ -22,7 +25,7 @@ $subdirectories = false;
 //if any of the databases do not exist as they are referenced by their path, they will be created automatically
 $databases = array(
 	array(
-		'path'=> '../downcode_db/downcode.sqlite3',
+		'path'=> DROPBOX_RESOLVED . '/downcode_db/downcode.sqlite3',
 		'name'=> 'Downcode'
 	),
 );
