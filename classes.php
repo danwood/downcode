@@ -26,18 +26,27 @@ class Crockford
     private $symbols = array();
     private $flippedSymbols = array();
     private $alphabet = '';
+    private $salt = 0;
 
-    function __construct($alphabet)
+    function __construct($alphabet, $saltChar)  // string for 0-31 values; char that adjusts value encoded/decoded
     {
       // Constraint: I's and L's and O's in the alphabet not allowed since those get converted to 1's and 0's.
       if (preg_match('/[a-zILO]/', $alphabet)) {
         throw new \RuntimeException("Alphabet '$alphabet' cannot contain lowercase letters, I's, L's, or O's.");
       }
+      $salt = strpos($alphabet, $saltChar);
+      if (FALSE === $salt) {
+        throw new \RuntimeException("Salt '$saltChar' must be part of alphabet '$alphabet'.");
+      }
+      $this->salt = $salt;
 
       $this->alphabet = $alphabet;
       $this->symbols = str_split($alphabet);
       $this->flippedSymbols = array();
       $counter = 0;
+
+      // We're not using the checksum feature but let's keep it here for now
+
       $alphabetPlusChecksum = $alphabet . '*~$=@';  // to make the base-37 checksum thing work. Note we use @ not U
       $moreSymbols = str_split($alphabetPlusChecksum);
       foreach ($moreSymbols as $char) {
@@ -85,6 +94,8 @@ class Crockford
         if (!$number) {
             return 0;
         }
+
+        $number += $this->salt;   // Mess with the number a bit!
 
         $digits = 0;
         $response = array();
@@ -222,6 +233,8 @@ class Crockford
             }
         }
 
+        $total -= $this->salt;
+
         return $total;
     }
 }
@@ -264,8 +277,9 @@ class DowncodeDB extends SQLite3
     $ret = $statement->execute();
     if ($result = $ret->fetchArray(SQLITE3_ASSOC) ){
       // We found an album that matches this prefix.
-      $restOfCode = substr($code, 2);                 // Skip first TWO characters. Second is marketing code.
-      $base32Converter = new Crockford($result['alphabet32']);
+      $secondChar = substr($code, 1, 1);  // Second char is marketing code and salt so it affects encoding
+      $restOfCode = substr($code, 2);     // The rest is base-32 encoded
+      $base32Converter = new Crockford($result['alphabet32'], $secondChar);
       $decoded = $base32Converter->decode($restOfCode);
       error_log('Decoded number from code ' . $restOfCode . ' = ' . $decoded);
       $modulo = $decoded % $result['seed'];
@@ -278,7 +292,14 @@ class DowncodeDB extends SQLite3
   }
 
 /*
-Looks like we can generate about 15,000 8-character codes (6 characters is a number, which is 30 bits, where we are multiplying by almost 2^16, which leaves about 2^14 so that makes sense.  If we had a higher seed like 2^18 then that would leave 2^12 codes which is about 4000.  If we had 9-character codes that would be another 5 bits, so 2^35 / 2^16 = 2^19 which would be > 500K codes available in that space!
+Looks like we can generate approximately 16,384 (2^14) 8-character codes (6 characters is a number, which is 30 bits, where we are multiplying by almost 2^16, which leaves about 2^14 so that makes sense.)
+
+If we had a higher seed like 2^18, presumably to make even less likely to guess a code, then that would leave 2^12 codes which is about 4096.  But we probably don't need to do that.
+
+If we had 9-character codes that would be another 5 bits, so 2^35 / 2^16 = 2^19 which would be > 500K codes available in that space!
+
+However, due to the second character acting as a salt, we now have the ability to generate 32 different "runs" of 16K codes.
+
  */
   function generateCodes($secondChar)      // Private for command line use
   {
@@ -287,7 +308,7 @@ Looks like we can generate about 15,000 8-character codes (6 characters is a num
     $ret = $statement->execute();
     while ($result = $ret->fetchArray(SQLITE3_ASSOC) ){
       echo $result['title'] . PHP_EOL . PHP_EOL;
-      $base32Converter = new Crockford($result['alphabet32']);
+      $base32Converter = new Crockford($result['alphabet32'], $secondChar);
       $counter = 0;
       $seed = $result['seed'];
       $prefix = $result['prefix'];
