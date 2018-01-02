@@ -29,6 +29,11 @@ class Crockford
 
     function __construct($alphabet)
     {
+      // Constraint: I's and L's and O's in the alphabet not allowed since those get converted to 1's and 0's.
+      if (preg_match('/[a-zILO]/', $alphabet)) {
+        throw new \RuntimeException("Alphabet '$alphabet' cannot contain lowercase letters, I's, L's, or O's.");
+      }
+
       $this->alphabet = $alphabet;
       $this->symbols = str_split($alphabet);
       $this->flippedSymbols = array();
@@ -270,6 +275,9 @@ class DowncodeDB extends SQLite3
     return null;
   }
 
+/*
+Looks like we can generate about 15,000 8-character codes (6 characters is a number, which is 30 bits, where we are multiplying by almost 2^16, which leaves about 2^14 so that makes sense.  If we had a higher seed like 2^18 then that would leave 2^12 codes which is about 4000.  If we had 9-character codes that would be another 5 bits, so 2^35 / 2^16 = 2^19 which would be > 500K codes available in that space!
+ */
   function generateCodes($secondChar)      // Private for command line use
   {
     if (strlen($secondChar) != 1) { error_log("second character must be 1 alpha character"); return; }
@@ -279,11 +287,13 @@ class DowncodeDB extends SQLite3
       echo $result['title'] . PHP_EOL . PHP_EOL;
       $base32Converter = new Crockford($result['alphabet32']);
       $counter = 0;
-      for ($i = 1 ; $i < 400000 ; $i++) {
-        $fullCode = $result['prefix'] . $secondChar . $base32Converter->encode($i * $result['seed']);
+      $seed = $result['seed'];
+      $prefix = $result['prefix'];
+      for ($i = 1 ; $i < 100000 ; $i++) {
+        $fullCode = $prefix . $secondChar . $base32Converter->encode($i * $seed );
         if (strlen($fullCode) < 8) continue;
         if (strlen($fullCode) > 8) break;
-        echo 'For seed ' . $i . ': ' . $fullCode . PHP_EOL;
+        echo /* 'For basis ' . $i . ' -> ' . $i * $seed . ' : ' . */ $fullCode /* . ' ===== ' . $base32Converter->decode(substr($fullCode, 2)) */ . PHP_EOL;
         $counter++;
       }
       echo PHP_EOL . 'CODES GENERATED: ' . $counter . PHP_EOL;
