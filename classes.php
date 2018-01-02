@@ -263,33 +263,113 @@ class DowncodeDB extends SQLite3
     $query = 'select * from format order by ordering';
     $ret = $this->query($query);
     while ($row = $ret->fetchArray(SQLITE3_ASSOC) ){
-      $entry = Array('description' => $row['description'], 'extension' => $row['extension']);
-      $result[] = $entry;
+      $result[] = $row;
     }
     return $result;
   }
 
-  function findAlbumFromCode($code) {
+  function findAndRedeemAlbumFromCode($code, $iOSDevice) {
 
+    $code = strtoupper(trim($code));    // quick and dirty normalize
+    $code = str_replace(' ', '', $code);// before we know the actual alphabet
     $result = Array();
     $statement = $this->prepare('SELECT * FROM album WHERE prefix = :prefix;');
     $statement->bindValue(':prefix', substr($code, 0, 1));
     $ret = $statement->execute();
-    if ($result = $ret->fetchArray(SQLITE3_ASSOC) ){
+    if ($album = $ret->fetchArray(SQLITE3_ASSOC) ){
       // We found an album that matches this prefix.
       $secondChar = substr($code, 1, 1);  // Second char is marketing code and salt so it affects encoding
+      $base32Converter = new Crockford($album['alphabet32'], $secondChar);
+      $code = $base32Converter->normalize($code); // Now properly normalize the code
       $restOfCode = substr($code, 2);     // The rest is base-32 encoded
-      $base32Converter = new Crockford($result['alphabet32'], $secondChar);
       $decoded = $base32Converter->decode($restOfCode);
       error_log('Decoded number from code ' . $restOfCode . ' = ' . $decoded);
-      $modulo = $decoded % $result['seed'];
-      error_log('Modulo seed ' . $result['seed'] . ' = ' . $modulo);
+      $modulo = $decoded % $album['seed'];
+      error_log('Modulo seed ' . $album['seed'] . ' = ' . $modulo);
       if (0 == $modulo) {
-        return $result;     // return the album!
+
+        // Code is valid - $album holds album array.
+        // But now let's see if the code is not already redeemed.
+        // We don't bother to 'redeem' code if we are on an iOS device though.
+
+        $statement = $this->prepare('SELECT *, datetime(timestamp, \'localtime\') AS whenCreated, datetime(downloadTimestamp, \'localtime\') AS whenDownloaded FROM redemption WHERE code = :code;');
+        $statement->bindValue(':code', $code);
+        // code albumID campaignCode  IP  cookie  email formatID  whenDownloaded  timestamp
+        $ret = $statement->execute();
+        if ($redemption = $ret->fetchArray(SQLITE3_ASSOC) ){
+
+          $valid = FALSE;
+          // Already redeemed.
+          // OK if an iOS device,
+          // OK if not downloaded yet,
+          // OK first redeemed within last 24 hours, and from same IP address.
+          if ($iOSDevice)
+          {
+            error_log("found redemption, but we are on iOS.");
+            $valid = TRUE;
+          }
+          if (!$redemption['whenDownloaded'])
+          {
+            error_log("found redemption, not downloaded yet.");
+            $valid = TRUE;
+          }
+
+          $whenDownloaded = strtotime($redemption['whenDownloaded']);
+          $howLongAgo = time() - $whenDownloaded;
+
+          if ($_SERVER['REMOTE_ADDR'] = $redemption['IP'] && $howLongAgo < 24*60*60 )
+          {
+            error_log("found redemption but IP matches it was created < 24 hours ago.");
+            $valid = TRUE;
+          }
+
+          if ($valid) {
+
+            $album['formatID'] = $redemption['formatID'];   // copy this to album record so we can pre-select last used format
+            return $album;
+          }
+          else {
+            error_log("found redemption, not allowing to download again");
+            return null;
+          }
+        }
+        else {
+         error_log("Inserting redemption.");
+         // Not redeemed yet.  Insert!
+          $statement = $this->prepare(
+            'INSERT INTO redemption(code,albumID,campaignCode,IP,cookie,email) values ('
+            . ':code,:albumID,:campaignCode,:IP,:cookie,:email);');
+          $statement->bindValue(':code', $code);
+          $statement->bindValue(':albumID', $album['ID']);
+          $statement->bindValue(':campaignCode', $secondChar);
+          $statement->bindValue(':IP', $_SERVER['REMOTE_ADDR']);
+          // $statement->bindValue(':cookie', 'COOKIE GOES HERE');
+          // $statement->bindValue(':email', 'EMAIL GOES HERE');
+          $ret = $statement->execute();
+          return $album;
+        }
       }
     }
     return null;
   }
+
+  public function tracksOfAlbumID($albumID) {
+
+    $result = Array();
+    $statement = $this->prepare('SELECT * FROM track WHERE albumID = :albumID;');
+    $statement->bindValue(':albumID', $albumID);
+    $ret = $statement->execute();
+    while ($track = $ret->fetchArray(SQLITE3_ASSOC) ){
+      $result[] = $track;
+    }
+    return $result;
+  }
+
+
+
+// Note: we should update the timestamp when we actually download album, so that the 24 hour rule is since it was DOWNLOADED
+
+
 
 /*
 Looks like we can generate approximately 16,384 (2^14) 8-character codes (6 characters is a number, which is 30 bits, where we are multiplying by almost 2^16, which leaves about 2^14 so that makes sense.)
