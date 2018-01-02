@@ -21,20 +21,23 @@ if ($album) {
 <h1><?php echo htmlspecialchars($album['title']); ?></h1>
 <p><?php echo htmlspecialchars($album['description']); ?></p>
 <img src="albums/<?php echo htmlspecialchars($album['imageName']); ?>" alt="<?php echo htmlspecialchars($album['title']); ?>" />
-<table border="1">
+<form id="downloader">
+	<input type="hidden" name="albumID" value="<?php echo $album['ID']; ?>" />
+	<table border="1">
+		<tr><td colspan="3"><button type="button" class="download" name="track" value="0">Download all</button></td></tr>
 <?php
 	$tracks = $db->tracksOfAlbumID($album['ID']);
 	foreach ($tracks as $track) {
 ?>
-	<tr>
-		<td><?php echo htmlspecialchars($track['trackNumber']); ?></td>
-		<td><?php echo htmlspecialchars($track['title']); ?></td>
-		<td><button></td>	<!-- use fileBase -->
-	</tr>
+		<tr>
+			<td><?php echo $track['trackNumber']; ?></td>
+			<td><?php echo htmlspecialchars($track['title']); ?></td>
+			<td><button type="button" class="download" name="track" value="<?php echo $track['trackNumber']; ?>">Download</button></td>	<!-- use fileBase -->
+		</tr>
 <?php
 }
 ?>
-</table>
+	</table>
 <?php
 if (!$iOSDevice) {
 	echo '<h2>Format:</h2>' . PHP_EOL;
@@ -55,6 +58,46 @@ if (!$iOSDevice) {
 	echo '</select>' . PHP_EOL;
 }
 ?>
+</form>
+
+
+<!-- jquery already loaded ??? -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<script>
+$('button.download').click(function (evt) {
+    evt.preventDefault();
+
+    var button = $(evt.target);
+    var serialized = button.parents('form').serialize()
+        + '&'
+        + encodeURI(button.attr('name'))
+        + '='
+        + encodeURI(button.attr('value'))
+    ;
+
+	alert(serialized);
+    $.ajax({
+      type: 'POST',
+      url: '/download.php',
+      data: serialized,
+
+      success: function(data, textStatus, jqXHR ) {
+
+      },
+      error: function(jqXHR, textStatus, errorThrown ) {
+            alert(errorThrown + ' ' + textStatus);
+      },
+      complete: function(jqXHR, textStatus ) {
+
+      }
+    });
+
+});
+
+</script>
+
+
 <?php
 }
 else
@@ -65,4 +108,10 @@ Sorry, but the code you used is not valid, or has already been redeemed. Please 
 </p>
 <?php
 }
+
+$db->close();
 ?>
+
+
+
+
