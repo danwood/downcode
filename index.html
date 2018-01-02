@@ -1,7 +1,8 @@
 <?php
-$iOS = false;       // or set to a non-false text value
+// We could show an initial warning that downloads from iOS don't go into the library directly?
+$iOSDevice = false;       // or set to a non-false text value
 if (preg_match("/(\\(iPod|\\(iPhone|\\(iPad)/", $_SERVER['HTTP_USER_AGENT'], $matches)) {
-    $iOS = substr($matches[1], 1);
+    $iOSDevice = substr($matches[1], 1);
 }
 $code = isset($_GET['code']) ? htmlspecialchars($_GET['code']) : '';
 $email = isset($_GET['email']) ? htmlspecialchars($_GET['email']) : '';
@@ -51,7 +52,7 @@ $email = isset($_GET['email']) ? htmlspecialchars($_GET['email']) : '';
   background: #888888;
 }
 
-body { position: relative;}
+body { position: relative; margin:0;}
 #cover {
     position:absolute;
     top:0;left:0;
@@ -100,6 +101,13 @@ body { position: relative;}
                             <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>" />
                             <input type="submit" name="go" id="redeem-submit" value="Submit Download Code" disabled />
                         </form>
+<?php
+if ($iOSDevice) {
+?>
+                        <div class="warning">Music tracks can be played but not downloaded on the <?php echo htmlspecialchars($iOSDevice); ?>.
+<?php
+}
+?>
                     </aside>
 
 
