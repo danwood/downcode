@@ -14,12 +14,13 @@ $album = $db->findAndRedeemAlbumFromCode($code, $iOSDevice);
 
 if ($album) {
 ?>
+<div id="redeem_console">
 <h1><?php echo htmlspecialchars($album['title']); ?></h1>
 <p><?php echo htmlspecialchars($album['description']); ?></p>
 <img src="albums/<?php echo htmlspecialchars($album['imageName']); ?>" alt="<?php echo htmlspecialchars($album['title']); ?>" />
 <form id="downloader">
-	<input type="hidden" name="albumID" value="<?php echo $album['ID']; ?>" />
-	<input type="hidden" name="code" value="<?php echo $code; ?>" />
+	<input type="hidden" id="albumID" name="albumID" value="<?php echo $album['ID']; ?>" />
+	<input type="hidden" id="code" name="code" value="<?php echo $code; ?>" />
 	<table border="1">
 <?php
 	if (!$iOSDevice) {
@@ -48,7 +49,7 @@ if ($album) {
 <?php
 if (!$iOSDevice) {
 	echo '<h2>Format:</h2>' . PHP_EOL;
-	echo '<select name="formatID">' . PHP_EOL;
+	echo '<select id="formatID" name="formatID">' . PHP_EOL;
 	$formats = $db->formats();
 	foreach ($formats as $format) {
 		echo '<option value="' . $format['ID'] . '"';
@@ -67,6 +68,7 @@ if (!$iOSDevice) {
 }
 ?>
 </form>
+</div> <!-- redeem_console -->
 
 
 <!-- jquery already loaded ??? -->
@@ -77,33 +79,23 @@ $('button.download').click(function (evt) {
     evt.preventDefault();
 
     var button = $(evt.target);
-    var serialized = button.parents('form').serialize()
-        + '&'
-        + encodeURI(button.attr('name'))
-        + '='
-        + encodeURI(button.attr('value'));
+    // Build a form
+    // Based on this: https://gist.github.com/DavidMah/3533415
+    var form = $('<form>').attr('action', 'download.php').attr('method', 'post');
+    form.append($("<input>").attr('type', 'hidden').attr('name', button.attr('name')).attr('value', button.attr('value')));
+    form.append($("<input>").attr('type', 'hidden').attr('name', 'albumID')          .attr('value', $('#albumID').val()));
+    form.append($("<input>").attr('type', 'hidden').attr('name', 'code')             .attr('value', $('#code').val()));
+    form.append($("<input>").attr('type', 'hidden').attr('name', 'formatID')         .attr('value', $('#formatID').val()));
+    form.appendTo('body').submit().remove();
 
-    $.ajax({
-      type: 'POST',
-      url: '/download.php',
-      data: serialized,
-
-      success: function(data, textStatus, jqXHR ) {
-      	data = data.trim();
-      	if ('' === data) {
-      		alert('Unable to download. Probably an error with the website!');
-      	}
-      	else {
-      		alert(data);
-      	}
-      },
-      error: function(jqXHR, textStatus, errorThrown ) {
-            alert(errorThrown + ' ' + textStatus);
-      },
-      complete: function(jqXHR, textStatus ) {
-      }
-    });
-
+    // Dim the download console for just a second so we know that something is happening when we click download. Good or dumb idea?
+    $( "#redeem_console" ).animate({
+        opacity: 0.25,
+      }, 100, function() {
+        setTimeout(function(){
+            $('#redeem_console').css({"opacity":"1.0"});
+        }, 900);
+      });
 });
 
 </script>
