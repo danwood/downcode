@@ -246,6 +246,10 @@ class DowncodeDB extends SQLite3
   function __construct()
   {
     $dbPath = DOWNCODE_DBDIR . '/downcode.sqlite3';
+    if (!is_writable($dbPath)) {
+      error_log("Not writeable database: " . $dbPath);
+      throw new \RuntimeException("Database cannot be updated");
+    }
     $this->open($dbPath, SQLITE3_OPEN_READWRITE);
   }
 
@@ -363,18 +367,42 @@ class DowncodeDB extends SQLite3
     return null;
   }
 
+  // Set the downloadTimeStamp on this redemption record if it is null.
   function updateRedemption($code)
   {
-
-
+    $statement = $this->prepare(
+      'UPDATE redemption SET downloadTimestamp=CURRENT_TIMESTAMP WHERE code=:code AND downloadTimestamp IS NULL;');
+    $statement->bindValue(':code', $code);
+    $ret = $statement->execute();
   }
 
   function updateDownloadCount($albumID, $trackID)
   {
-
-
-
+    if (!$trackID)  // downloading whole album
+    {
+      $statement = $this->prepare(
+        'UPDATE album SET downloadCount=downloadCount+1 WHERE ID=:albumID;');
+      $statement->bindValue(':albumID', $albumID);
+      $ret = $statement->execute();
+    }
+    else
+    {
+      $statement = $this->prepare(
+        'UPDATE track SET downloadCount=downloadCount+1 WHERE ID=:trackID;');
+      $statement->bindValue(':trackID', $trackID);
+      $ret = $statement->execute();
+    }
   }
+
+  function updateFormatCount($formatID)
+  {
+    $statement = $this->prepare(
+      'UPDATE format SET downloadCount=downloadCount+1 WHERE ID=:formatID;');
+    $statement->bindValue(':formatID', $formatID);
+    $ret = $statement->execute();
+  }
+
+
 
 
   function tracksOfAlbumID($albumID) {

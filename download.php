@@ -32,11 +32,6 @@ if (!$filename) {
 	die;
 }
 
-// Update the database to indicate that download has happened
-
-$db->updateRedemption($code);
-$db->updateDownloadCount($albumID, $trackID);
-
 // Now, let us initiate the actual download.
 
 $filename = str_replace('/','_', $filename);	// protect against baddies
@@ -44,6 +39,11 @@ $filename = str_replace('/','_', $filename);	// protect against baddies
 $path = DOWNCODE_FILESDIR . '/' . $filename;
 if (file_exists($path))
 {
+	// Update the database to indicate that download has happened
+	$db->updateRedemption($code);
+	$db->updateDownloadCount($albumID, $trackID);
+	$db->updateFormatCount($formatID);
+
 	$fp = fopen($path, 'rb');
 
 	// send the right headers
