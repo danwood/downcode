@@ -88,12 +88,15 @@ $('button.download').click(function (evt) {
     form.append($("<input>").attr('type', 'hidden').attr('name', 'f').attr('value', $('#f_input').val()));
     form.appendTo('body').submit().remove();
 
+    // Disable the downloading button
+    button.prop("disabled",true);
     // Dim the download console for just a second so we know that something is happening when we click download. Good or dumb idea?
     $("#redeem_console").parent().animate({
         opacity: 0.5,
       }, 100, function() {
         setTimeout(function(){
             $('#redeem_console').parent().css({"opacity":"1.0"});
+    		button.prop("disabled",false);	// and restore the button
         }, 900);
       });
 });
