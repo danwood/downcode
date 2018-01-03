@@ -295,9 +295,7 @@ class DowncodeDB extends SQLite3
       $code = $base32Converter->normalize($code); // Now properly normalize the code
       $restOfCode = substr($code, 2);     // The rest is base-32 encoded
       $decoded = $base32Converter->decode($restOfCode);
-      error_log('Decoded number from code ' . $restOfCode . ' = ' . $decoded);
       $modulo = $decoded % $album['seed'];
-      error_log('Modulo seed ' . $album['seed'] . ' = ' . $modulo);
       if (0 == $modulo) {
 
         // Code is valid - $album holds album array.

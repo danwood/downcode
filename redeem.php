@@ -93,6 +93,9 @@ $('button.download').click(function (evt) {
       	if ('' === data) {
       		alert('Unable to download. Probably an error with the website!');
       	}
+      	else {
+      		alert(data);
+      	}
       },
       error: function(jqXHR, textStatus, errorThrown ) {
             alert(errorThrown + ' ' + textStatus);
