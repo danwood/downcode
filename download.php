@@ -6,20 +6,36 @@ function sendStatusCode($statusCode)
     header(' ', true, $statusCode);
 }
 
-
 // Required: albumID, format, track, code (redemption code so we can mark that download is happening)
 
-$albumID	= $_POST['albumID'];
-$formatID	= $_POST['formatID'];
-$track		= $_POST['track'];
-$code		= $_POST['code'];
+$albumID	= $_POST['a'];
+$formatID	= $_POST['f'];
+$trackID	= $_POST['t'];
+$code		= $_POST['c'];
+
+if (!$albumID || !$formatID || !$code) {
+	error_log("403 error: Missing Parameters");
+	sendStatusCode(403);
+	echo "Parameters not specified";
+	die;
+}
 
 require_once('classes.php');
 $db = new DowncodeDB();
 
-$filename = $db->fileNameForAlbumTrackExtension($albumID, $track, $formatID);
+$filename = $db->fileNameForAlbumTrackExtension($albumID, $trackID, $formatID);
 
-if (!$filename) { sendStatusCode(403); echo "File not specified"; die; }		// This will show an error message on the form that calls this.
+if (!$filename) {
+	error_log("403 error: Not finding albumID: $albumID trackID: $trackID");
+	sendStatusCode(403);
+	echo "File not specified";
+	die;
+}
+
+// Update the database to indicate that download has happened
+
+$db->updateRedemption($code);
+$db->updateDownloadCount($albumID, $trackID);
 
 // Now, let us initiate the actual download.
 
@@ -44,6 +60,7 @@ if (file_exists($path))
 }
 else
 {
+	error_log("404 error: Not finding $path");
 	sendStatusCode(404);	// file doesn't exist
 	echo "File not found";
 }

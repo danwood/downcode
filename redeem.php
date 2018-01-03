@@ -19,13 +19,13 @@ if ($album) {
 <p><?php echo htmlspecialchars($album['description']); ?></p>
 <img src="albums/<?php echo htmlspecialchars($album['imageName']); ?>" alt="<?php echo htmlspecialchars($album['title']); ?>" />
 <form id="downloader">
-	<input type="hidden" id="albumID" name="albumID" value="<?php echo $album['ID']; ?>" />
-	<input type="hidden" id="code" name="code" value="<?php echo $code; ?>" />
+	<input type="hidden" id="a_input" name="a" value="<?php echo $album['ID']; ?>" />
+	<input type="hidden" id="c_input" name="c" value="<?php echo $code; ?>" />
 	<table border="1">
 <?php
 	if (!$iOSDevice) {
 ?>
-		<tr><td colspan="3"><button type="button" class="download" name="track" value="0">Download all</button></td></tr>
+		<tr><td colspan="3"><button type="button" class="download" name="t" value="0">Download all</button></td></tr>
 <?php
 	}
 	$tracks = $db->tracksOfAlbumID($album['ID']);
@@ -37,7 +37,7 @@ if ($album) {
 <?php
 	if (!$iOSDevice) {
 ?>
-			<td><button type="button" class="download" name="track" value="<?php echo $track['trackNumber']; ?>">Download</button></td>	<!-- use fileBase -->
+			<td><button type="button" class="download" name="t" value="<?php echo $track['ID']; ?>">Download</button></td>	<!-- use fileBase -->
 <?php
 	}
 ?>
@@ -49,7 +49,7 @@ if ($album) {
 <?php
 if (!$iOSDevice) {
 	echo '<h2>Format:</h2>' . PHP_EOL;
-	echo '<select id="formatID" name="formatID">' . PHP_EOL;
+	echo '<select id="f_input" name="f">' . PHP_EOL;
 	$formats = $db->formats();
 	foreach ($formats as $format) {
 		echo '<option value="' . $format['ID'] . '"';
@@ -82,10 +82,10 @@ $('button.download').click(function (evt) {
     // Build a form
     // Based on this: https://gist.github.com/DavidMah/3533415
     var form = $('<form>').attr('action', 'download.php').attr('method', 'post');
-    form.append($("<input>").attr('type', 'hidden').attr('name', button.attr('name')).attr('value', button.attr('value')));
-    form.append($("<input>").attr('type', 'hidden').attr('name', 'albumID')          .attr('value', $('#albumID').val()));
-    form.append($("<input>").attr('type', 'hidden').attr('name', 'code')             .attr('value', $('#code').val()));
-    form.append($("<input>").attr('type', 'hidden').attr('name', 'formatID')         .attr('value', $('#formatID').val()));
+    form.append($("<input>").attr('type', 'hidden').attr('name', 't').attr('value', button.attr('value')));
+    form.append($("<input>").attr('type', 'hidden').attr('name', 'a').attr('value', $('#a_input').val()));
+    form.append($("<input>").attr('type', 'hidden').attr('name', 'c').attr('value', $('#c_input').val()));
+    form.append($("<input>").attr('type', 'hidden').attr('name', 'f').attr('value', $('#f_input').val()));
     form.appendTo('body').submit().remove();
 
     // Dim the download console for just a second so we know that something is happening when we click download. Good or dumb idea?

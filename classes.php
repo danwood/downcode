@@ -363,6 +363,20 @@ class DowncodeDB extends SQLite3
     return null;
   }
 
+  function updateRedemption($code)
+  {
+
+
+  }
+
+  function updateDownloadCount($albumID, $trackID)
+  {
+
+
+
+  }
+
+
   function tracksOfAlbumID($albumID) {
 
     $result = Array();
@@ -375,12 +389,12 @@ class DowncodeDB extends SQLite3
     return $result;
   }
 
-  function fileNameForAlbumTrackExtension($albumID, $trackNumber, $formatID)
+  function fileNameForAlbumTrackExtension($albumID, $trackID, $formatID)
   {
     $result = NULL;
     $extension = $this->formatExtensionFromID($formatID);
 
-    if (0 == $trackNumber) {
+    if (0 == $trackID) {
       // special case, entire album
       $statement = $this->prepare('SELECT * FROM album WHERE id = :albumID');
       $statement->bindValue(':albumID', $albumID);
@@ -389,9 +403,9 @@ class DowncodeDB extends SQLite3
         $result = $track['zipFileBase'] . '.' . $extension . '.zip';
       }
     } else {
-      $statement = $this->prepare('SELECT * FROM track WHERE albumID = :albumID AND trackNumber = :trackNumber;');
+      $statement = $this->prepare('SELECT * FROM track WHERE albumID = :albumID AND ID = :ID;');
       $statement->bindValue(':albumID', $albumID);
-      $statement->bindValue(':trackNumber', $trackNumber);
+      $statement->bindValue(':ID', $trackID);
       $ret = $statement->execute();
       if ($track = $ret->fetchArray(SQLITE3_ASSOC) ){
         $result = $track['fileBase'] . '.' . $extension;
