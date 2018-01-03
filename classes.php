@@ -475,30 +475,5 @@ However, due to the second character acting as a salt, we now have the ability t
       echo PHP_EOL . 'CODES GENERATED: ' . $counter . PHP_EOL;
     }
   }
-
-
-  public static function passThruAttachment($path, $name='')
-  {
-    if (empty($name))
-    {
-      $name = housekeeping::lastPathComponent($path);
-    }
-
-    $fp = fopen($path, 'rb');
-
-    // send the right headers
-    header("Content-Type: application/zip");
-    header("Content-Length: " . filesize($path));
-    header('Content-Disposition: attachment; filename="' . $name . '"');
-    header("Content-Description: File Transfer");
-    header("Cache-Control: public");
-    header("Content-Transfer-Encoding: binary");
-
-    // dump the picture and stop the script
-    fpassthru($fp);
-  }
-
-
-
 }
 
