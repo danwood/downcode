@@ -89,11 +89,11 @@ $('button.download').click(function (evt) {
     form.appendTo('body').submit().remove();
 
     // Dim the download console for just a second so we know that something is happening when we click download. Good or dumb idea?
-    $( "#redeem_console" ).animate({
-        opacity: 0.25,
+    $("#redeem_console").parent().animate({
+        opacity: 0.5,
       }, 100, function() {
         setTimeout(function(){
-            $('#redeem_console').css({"opacity":"1.0"});
+            $('#redeem_console').parent().css({"opacity":"1.0"});
         }, 900);
       });
 });
