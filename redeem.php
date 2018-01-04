@@ -40,8 +40,8 @@ div#now-playing{
 
 
 img[amplitude-song-info="cover_art_url"]{
-	width: 400px;
-	height: 400px;
+	width: 100%;
+	height:100%;
 }
 
 #player-left-bottom{
@@ -327,12 +327,16 @@ div.song:after{
 	clear: both;
 }
 
+#cover-art-container, #time-container, #central-controls, #meta-container {
+	width:50%;
+	float:left;
+}
 /* Small only */
 @media screen and (max-width: 39.9375em) {
-	img[amplitude-song-info="cover_art_url"]{
-		width: auto;
-		height: auto;
-	}
+
+
+
+
 }
 
 
@@ -380,8 +384,9 @@ if (!$iOSDevice) {
 
 <!-- Player Console -->
 
-
+<div id="cover-art-container">
 <img amplitude-song-info="cover_art_url" amplitude-main-song-info="true"/>
+</div>
 
 <div id="time-container">
 	<span class="current-time">
@@ -394,11 +399,11 @@ if (!$iOSDevice) {
 </div>
 
 
-		<div id="central-controls">
-			<div class="amplitude-prev" id="previous"></div>
-			<div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
-			<div class="amplitude-next" id="next"></div>
-		</div>
+<div id="central-controls">
+	<div class="amplitude-prev" id="previous"></div>
+	<div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
+	<div class="amplitude-next" id="next"></div>
+</div>
 
 <div id="meta-container">
 	<span amplitude-song-info="name" amplitude-main-song-info="true" class="song-name"></span>
@@ -408,6 +413,7 @@ if (!$iOSDevice) {
 		<span amplitude-song-info="album" amplitude-main-song-info="true"></span>
 	</div>
 </div>
+
 
 <?php
 if (!$iOSDevice) {
