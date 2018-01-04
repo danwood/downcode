@@ -248,6 +248,7 @@ class DowncodeDB extends SQLite3
     $dbPath = DOWNCODE_DBDIR . '/downcode.sqlite3';
     if (!is_writable($dbPath)) {
       error_log("Not writeable database: " . $dbPath);
+      echo '<h1><a href="applescript://com.apple.scripteditor?action=new&script=do%20shell%20script%20%22chmod%20666%20~%2FDropbox%2Fdowncode_db%2Fdowncode.sqlite3%22">chmod 666 ~/Dropbox/downcode_db/downcode.sqlite3</a></h1>';
       throw new \RuntimeException("Database cannot be updated");
     }
     $this->open($dbPath, SQLITE3_OPEN_READWRITE);
