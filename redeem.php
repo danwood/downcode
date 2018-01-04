@@ -39,7 +39,7 @@ div#now-playing{
 }
 
 
-#amplitude-left img[amplitude-song-info="cover_art_url"]{
+img[amplitude-song-info="cover_art_url"]{
 	width: 400px;
 	height: 400px;
 }
@@ -148,7 +148,9 @@ input[type=range].amplitude-song-slider::-ms-tooltip {
 	display: none;
 }
 
-span.duration{
+#time-container{ background:orange;}
+
+#time-container .duration{
 	color: #607D8B;
 	font-size: 14px;
 	font-weight: 700;
@@ -163,30 +165,12 @@ span.duration{
 	clear: both;
 }
 
-#control-container{
-	margin-top: 25px;
-}
-#repeat-container{
-	width: 20%;
-	float: left;
-}
 
-#repeat{
-	width: 24px;
-	height: 19px;
-	cursor: pointer;
-	float: right;
-	margin-top: 20px;
-}
-
-#central-control-container{
-	width: 60%;
-	float: left;
-}
 
 #central-controls{
 	width: 130px;
 	margin: auto;
+	background:#FF8800;
 }
 
 #previous{
@@ -229,18 +213,6 @@ span.duration{
 	margin-left: -5px;
 }
 
-#shuffle-container{
-	width: 20%;
-	float: left;
-}
-#shuffle{
-	width: 23px;
-	height: 19px;
-	cursor: pointer;
-	float: left;
-	margin-top: 20px;
-}
-
 #control-container:after{
 	content: "";
 	display: table;
@@ -250,6 +222,7 @@ span.duration{
 #meta-container{
 	text-align: center;
 	margin-top: 5px;
+	background:yellow;
 }
 
 span.song-name{
@@ -260,6 +233,7 @@ span.song-name{
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	background:beige;
 }
 
 div.song-artist-album{
@@ -271,21 +245,18 @@ div.song-artist-album{
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	background:tan;
 }
 
 div.song-artist-album span{
 	display: block;
 }
 
-/* Player right styles */
-#amplitude-right{
-	padding: 0px;
-	overflow-y: scroll;
-}
 
 div.song{
 	cursor: pointer;
 	padding: 10px;
+	background:brown;
 }
 
 div.song-now-playing-icon-container{
@@ -340,16 +311,6 @@ span.song-artist{
 	text-overflow: ellipsis;
 }
 
-img.bandcamp-grey{
-	float: left;
-	display: block;
-	margin-top: 10px;
-}
-img.bandcamp-white{
-	float: left;
-	display: none;
-	margin-top: 10px;
-}
 span.song-duration{
 	float: left;
 	width: 55px;
@@ -368,7 +329,7 @@ div.song:after{
 
 /* Small only */
 @media screen and (max-width: 39.9375em) {
-	#amplitude-left img[amplitude-song-info="cover_art_url"]{
+	img[amplitude-song-info="cover_art_url"]{
 		width: auto;
 		height: auto;
 	}
@@ -419,51 +380,34 @@ if (!$iOSDevice) {
 
 <!-- Player Console -->
 
-		<div class="row">
-			<div class="" id="">
-				<div class="row">
-					<div class="" id="amplitude-left">
-						<img amplitude-song-info="cover_art_url" amplitude-main-song-info="true"/>
-						<div id="player-left-bottom">
-							<div id="time-container">
-								<span class="current-time">
-									<span class="amplitude-current-minutes" amplitude-main-current-minutes="true"></span>:<span class="amplitude-current-seconds" amplitude-main-current-seconds="true"></span>
-								</span>
-								<input type="range" class="amplitude-song-slider" amplitude-main-song-slider="true" step=".1"/>
-								<span class="duration">
-									<span class="amplitude-duration-minutes" amplitude-main-duration-minutes="true"></span>:<span class="amplitude-duration-seconds" amplitude-main-duration-seconds="true"></span>
-								</span>
-							</div>
 
-							<div id="control-container">
-								<div id="repeat-container">
-									<div class="amplitude-repeat" id="repeat"></div>
-								</div>
+<img amplitude-song-info="cover_art_url" amplitude-main-song-info="true"/>
 
-								<div id="central-control-container">
-									<div id="central-controls">
-										<div class="amplitude-prev" id="previous"></div>
-										<div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
-										<div class="amplitude-next" id="next"></div>
-									</div>
-								</div>
+<div id="time-container">
+	<span class="current-time">
+		<span class="amplitude-current-minutes" amplitude-main-current-minutes="true"></span>:<span class="amplitude-current-seconds" amplitude-main-current-seconds="true"></span>
+	</span>
+	<input type="range" class="amplitude-song-slider" amplitude-main-song-slider="true" step=".1"/>
+	<span class="duration">
+		<span class="amplitude-duration-minutes" amplitude-main-duration-minutes="true"></span>:<span class="amplitude-duration-seconds" amplitude-main-duration-seconds="true"></span>
+	</span>
+</div>
 
-								<div id="shuffle-container">
-									<div class="amplitude-shuffle amplitude-shuffle-off" id="shuffle"></div>
-								</div>
-							</div>
 
-							<div id="meta-container">
-								<span amplitude-song-info="name" amplitude-main-song-info="true" class="song-name"></span>
+		<div id="central-controls">
+			<div class="amplitude-prev" id="previous"></div>
+			<div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
+			<div class="amplitude-next" id="next"></div>
+		</div>
 
-								<div class="song-artist-album">
-									<span amplitude-song-info="artist" amplitude-main-song-info="true"></span>
-									<span amplitude-song-info="album" amplitude-main-song-info="true"></span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="amplitude-right">
+<div id="meta-container">
+	<span amplitude-song-info="name" amplitude-main-song-info="true" class="song-name"></span>
+
+	<div class="song-artist-album">
+		<span amplitude-song-info="artist" amplitude-main-song-info="true"></span>
+		<span amplitude-song-info="album" amplitude-main-song-info="true"></span>
+	</div>
+</div>
 
 <?php
 if (!$iOSDevice) {
