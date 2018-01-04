@@ -556,13 +556,13 @@ foreach ($tracks as $track) {
 		{
 			"name": "<?php echo htmlspecialchars($track['title']); ?>",
 			"album": "<?php echo htmlspecialchars($album['title']); ?>",
-			"url": "tracks/<?php echo htmlspecialchars($track['fileBase']); ?>.mp3",
+			"url": "downcode_tracks/<?php echo htmlspecialchars($track['fileBase']); ?>.mp3",
 		},
 <?php
 }
 ?>
 	],
-	"default_album_art": "albums/<?php echo htmlspecialchars($album['imageName']); ?>"
+	"default_album_art": "album_art/<?php echo htmlspecialchars($album['imageName']); ?>"
 });
 </script>
 </body>
