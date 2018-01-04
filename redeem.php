@@ -473,9 +473,10 @@ if (!$iOSDevice) {
 <?php
 }
 
+$trackIndex = 0;
 foreach ($tracks as $track) {
 ?>
-						<div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="<?php echo $track['trackNumber']; ?>">
+						<div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="<?php echo $trackIndex++; ?>">
 							<div class="song-now-playing-icon-container">
 								<div class="play-button-container">
 
@@ -483,15 +484,17 @@ foreach ($tracks as $track) {
 								<div class="now-playing"></div>
 							</div>
 							<div class="song-meta-data">
+								<span class="track-number"><?php echo htmlspecialchars($track['trackNumber']); ?></span>.
 								<span class="song-title"><?php echo htmlspecialchars($track['title']); ?></span>
 							</div>
-							<span class="song-duration">DUR</span>
+							<span class="song-duration"><?php echo htmlspecialchars($track['duration']); ?></span>
 <?php
 	if (!$iOSDevice) {
 ?>
 							<div class="song-download">
 								<button type="button" class="download" name="t" value="<?php echo $track['ID']; ?>">Download</button>
 								<?php echo htmlspecialchars($track['fileBase']); ?>
+
 							</div>
 <?php
 	}
@@ -501,8 +504,6 @@ foreach ($tracks as $track) {
 <?php
 }
 ?>
-
-
 					</div>
 				</div>
 			</div>
@@ -556,13 +557,15 @@ foreach ($tracks as $track) {
 		{
 			"name": "<?php echo htmlspecialchars($track['title']); ?>",
 			"album": "<?php echo htmlspecialchars($album['title']); ?>",
+			"artist": "<?php echo htmlspecialchars($album['artist']); ?>",
 			"url": "downcode_tracks/<?php echo htmlspecialchars($track['fileBase']); ?>.mp3",
+			"cover_art_url": "album_art/<?php echo htmlspecialchars($album['imageName']); ?>",
+
 		},
 <?php
 }
 ?>
 	],
-	"default_album_art": "album_art/<?php echo htmlspecialchars($album['imageName']); ?>"
 });
 </script>
 </body>
