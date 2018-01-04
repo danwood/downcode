@@ -32,8 +32,9 @@ NOW-PLAYING - NEED TO CONVERT TO A DIV WITH BACKGROUND IMAGE
 
 div#now-playing{
 	display: inline-block;
-	width: 40px;
-	height: 40px;
+	width: 20px;
+	height: 20px;
+	background-color:red;
 	background: url('data:image/svg+xml;charset=UTF-8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><circle fill="#00A0FF" cx="10" cy="10" r="10"/><path d="M8.9 12.13c-.1 0-.2-.03-.27-.09l-1.6-1.16H5.48a.47.47 0 0 1-.47-.46V8.85c0-.25.2-.46.47-.47h1.55l1.59-1.3a.5.5 0 0 1 .3-.1c.26 0 .47.2.47.47v4.22c0 .26-.21.46-.47.46zm1.87-.3l-.45-.44a2.8 2.8 0 0 0 0-3.51l.45-.44a3.42 3.42 0 0 1 0 4.4zm1.21 1.22l-.44-.44a4.5 4.5 0 0 0 0-5.95l.44-.44a5.13 5.13 0 0 1 0 6.83zm1.22 1.22l-.44-.44a6.22 6.22 0 0 0 0-8.39L13.2 5a6.85 6.85 0 0 1 0 9.27z" fill="#FFF"/></g></svg>');
 }
 
@@ -292,10 +293,7 @@ div.song-now-playing-icon-container{
 	width: 20px;
 	height: 20px;
 	margin-right: 10px;
-}
-img.now-playing{
-	display: none;
-	margin-top: 15px;
+	background:orange;
 }
 
 div.play-button-container{
@@ -305,16 +303,17 @@ div.play-button-container{
 	height: 22px;
 	margin-top: 10px;
 	opacity:50%;
+	background:blue;
 }
 
 div.play-button-container:hover{
 	opacity:100%;
 }
 
-div.song.amplitude-active-song-container div.song-now-playing-icon-container img.now-playing{
+div.song.amplitude-active-song-container div.song-now-playing-icon-container div.now-playing{
 	display: block;
 }
-div.song.amplitude-active-song-container div.song-now-playing-icon-container:hover img.now-playing div.play-button-container{
+div.song.amplitude-active-song-container div.song-now-playing-icon-container:hover div.now-playing div.play-button-container{
 	display: none;
 }
 div.song-meta-data{
@@ -567,6 +566,41 @@ foreach ($tracks as $track) {
 ?>
 	],
 });
+
+	/*
+		Ensure that on mouseover, CSS styles don't get messed up for active songs.
+	*/
+	jQuery('.song').on('mouseover', function(){
+		jQuery(this).css('background-color', '#00A0FF');
+		jQuery(this).find('.song-meta-data .song-title').css('color', '#FFFFFF');
+		jQuery(this).find('.song-meta-data .song-artist').css('color', '#FFFFFF');
+
+		if( !jQuery(this).hasClass('amplitude-active-song-container') ){
+			jQuery(this).find('.play-button-container').css('display', 'block');
+		}
+
+		jQuery(this).find('.song-duration').css('color', '#FFFFFF');
+	});
+
+	/*
+		Ensure that on mouseout, CSS styles don't get messed up for active songs.
+	*/
+	jQuery('.song').on('mouseout', function(){
+		jQuery(this).css('background-color', '');
+		jQuery(this).find('.song-meta-data .song-title').css('color', '');
+		jQuery(this).find('.song-meta-data .song-artist').css('color', '');
+		jQuery(this).find('.play-button-container').css('display', 'none');
+		jQuery(this).find('.song-duration').css('color', '');
+	});
+
+	/*
+		Show and hide the play button container on the song when the song is clicked.
+	*/
+	jQuery('.song').on('click', function(){
+		jQuery(this).find('.play-button-container').css('display', 'none');
+	});
+
+
 </script>
 </body>
 </html>
