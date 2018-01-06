@@ -37,126 +37,7 @@ div#now-playing{
 }
 
 
-img[amplitude-song-info="cover_art_url"]{
-	width: 100%;
-	height:100%;
-}
 
-
-span.current-time{
-	color: #607D8B;
-	font-size: 14px;
-	font-weight: 700;
-	float: left;
-	width: 15%;
-	text-align: center;
-}
-
-#time-container .duration{
-	color: #607D8B;
-	font-size: 14px;
-	font-weight: 700;
-	float: left;
-	width: 15%;
-	text-align: center;
-}
-
-#time-container:after{
-	content: "";
-	display: table;
-	clear: both;
-}
-
-input[type=range].amplitude-song-slider{
-	-webkit-appearance: none;
-	width: 70%;
-	float: left;
-	margin:10px 0 12px 0;
-}
-
-
-#central-controls{
-	width:100%;
-}
-#central-controls-grouped{
-	width:130px;
-	margin:0 auto;
-}
-
-#previous{
-	display: inline-block;
-	width: 40px;
-	height: 40px;
-	cursor: pointer;
-	background: url('data:image/svg+xml;charset=UTF-8,<svg width="39" height="39" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><ellipse fill="#00A0FF" cx="19.5" cy="19.5" rx="19.5" ry="19.5"/><path d="M16.13 18.25V12.3c0-.72-.58-1.3-1.29-1.3H12.3a1.3 1.3 0 0 0-1.3 1.3v13.9c0 .72.58 1.3 1.29 1.3h2.55a1.3 1.3 0 0 0 1.3-1.3v-5.95l11.3 7c.85.56 1.55.15 1.55-.92V12.17c0-1.07-.7-1.48-1.56-.92l-11.3 7z" fill="#FFF"/></g></svg>');
-	background-repeat: no-repeat;
-	float: left;
-	margin-top: 10px;
-	margin-right: -5px;
-}
-
-#play-pause{
-	display: inline-block;
-	width: 60px;
-	height: 60px;
-	cursor: pointer;
-	float: left;
-}
-
-#play-pause.amplitude-paused{
-	background: url('data:image/svg+xml;charset=UTF-8,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><circle fill="#00A0FF" cx="30" cy="30" r="30"/><path d="M43.63 29.8L23.64 17.43c-1.46-.96-2.65-.26-2.65 1.56V43c0 1.81 1.19 2.52 2.65 1.56L43.63 32.2s.7-.5.7-1.2-.7-1.2-.7-1.2z" fill="#FFF"/></g></svg>');
-}
-
-#play-pause.amplitude-playing{
-	background: url('data:image/svg+xml;charset=UTF-8,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><circle fill="#00A0FF" cx="30" cy="30" r="30"/><path d="M40.59 16.61h-4.33a2.2 2.2 0 0 0-2.2 2.2v23.6c0 1.21.99 2.2 2.2 2.2h4.33a2.2 2.2 0 0 0 2.18-2.2V18.8a2.18 2.18 0 0 0-2.18-2.2zm-16.39 0h-4.33a2.2 2.2 0 0 0-2.2 2.2v23.6c0 1.21 1 2.2 2.2 2.2h4.33a2.2 2.2 0 0 0 2.19-2.2V18.8a2.2 2.2 0 0 0-2.19-2.2z" fill="#FFF"/></g></svg>');
-}
-
-#next{
-	display: inline-block;
-	width: 40px;
-	height: 40px;
-	cursor: pointer;
-	background: url('data:image/svg+xml;charset=UTF-8,<svg width="39" height="39" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><ellipse fill="#00A0FF" cx="19.5" cy="19.5" rx="19.5" ry="19.5"/><path d="M27.68 11h-2.55a1.3 1.3 0 0 0-1.29 1.3v5.94l-11.28-6.99c-.86-.56-1.56-.15-1.56.92V26.3c0 1.07.7 1.48 1.56.92l11.28-7v5.95c0 .72.58 1.3 1.3 1.3h2.54c.71 0 1.28-.58 1.28-1.3V12.3c0-.72-.57-1.3-1.28-1.3z" fill="#FFF"/></g></svg>');
-	background-repeat: no-repeat;
-	float: left;
-	margin-top: 10px;
-	margin-left: -5px;
-}
-
-#control-container:after{
-	content: "";
-	display: table;
-	clear: both;
-}
-
-#meta-container{
-	text-align: center;
-}
-
-span.song-name{
-	display: block;
-	color: #272726;
-	font-size: 20px;
-	font-family: 'Open Sans', sans-serif;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-div.song-artist-album{
-	color: #607D8B;
-	font-size: 14px;
-	font-weight: 700;
-	text-transform: uppercase;
-	font-family: 'Open Sans', sans-serif;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-div.song-artist-album span{
-	display: block;
-}
 
 
 div.song{
@@ -192,7 +73,11 @@ div.song.amplitude-active-song-container div.song-now-playing-icon-container:hov
 }
 div.song-meta-data{
 	float: left;
-	width: calc( 100% - 110px );
+	width: calc( 100% - 200px );
+}
+div.song-download {
+	float:left;
+	width:100px;
 }
 span.song-title{
 	color: #272726;
@@ -204,11 +89,10 @@ span.song-title{
 	text-overflow: ellipsis;
 }
 
-span.song-duration{
+span.song-duration, span.track-number{
 	float: left;
 	width: 55px;
 	text-align: center;
-	line-height: 45px;
 	color: #607D8B;
 	font-size: 16px;
 	font-weight: 500;
@@ -219,6 +103,8 @@ div.song:after{
 	display: table;
 	clear: both;
 }
+
+/* Responsive, big containers */
 
 #cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
 	width:50%;
@@ -231,11 +117,9 @@ div.song:after{
 /* Small only */
 @media screen and (max-width: 39.9375em) {
 
-#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
-	width:100%;
-}
-
-
+	#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
+		width:100%;
+	}
 }
 
 
@@ -335,7 +219,7 @@ foreach ($tracks as $track) {
 			<div class="now-playing"></div>
 		</div>
 		<div class="song-meta-data">
-			<span class="track-number"><?php echo htmlspecialchars($track['trackNumber']); ?></span>.
+			<span class="track-number"><?php echo htmlspecialchars($track['trackNumber']); ?>.</span>
 			<span class="song-title"><?php echo htmlspecialchars($track['title']); ?></span>
 		</div>
 		<span class="song-duration"><?php echo htmlspecialchars($track['duration']); ?></span>
@@ -344,8 +228,6 @@ if (!$iOSDevice) {
 ?>
 		<div class="song-download">
 			<button type="button" class="download" name="t" value="<?php echo $track['ID']; ?>">Download</button>
-			<?php echo htmlspecialchars($track['fileBase']); ?>
-
 		</div>
 <?php
 	}
@@ -421,7 +303,7 @@ foreach ($tracks as $track) {
 	*/
 	jQuery('.song').on('mouseover', function(){
 		jQuery(this).css('background-color', '#00A0FF');
-		jQuery(this).find('.song-meta-data .song-title').css('color', '#FFFFFF');
+		jQuery(this).find('.song-meta-data *').css('color', '#FFFFFF');
 
 		if( !jQuery(this).hasClass('amplitude-active-song-container') ){
 			jQuery(this).find('.play-button-container').css('display', 'block');
@@ -435,7 +317,7 @@ foreach ($tracks as $track) {
 	*/
 	jQuery('.song').on('mouseout', function(){
 		jQuery(this).css('background-color', '');
-		jQuery(this).find('.song-meta-data .song-title').css('color', '');
+		jQuery(this).find('.song-meta-data *').css('color', '');
 		jQuery(this).find('.play-button-container').css('display', 'none');
 		jQuery(this).find('.song-duration').css('color', '');
 	});
