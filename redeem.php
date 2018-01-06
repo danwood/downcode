@@ -20,15 +20,13 @@ $album = $db->findAndRedeemAlbumFromCode($code, $iOSDevice);
 $tracks = $db->tracksOfAlbumID($album['ID']);
 
 ?>
+<!DOCTYPE html>
 <html>
 <head>
+<link href="styles.css" rel="stylesheet" />
 <style>
 
-/*
-
-NOW-PLAYING - NEED TO CONVERT TO A DIV WITH BACKGROUND IMAGE
-
-*/
+body { font-family:'Gill Sans';}
 
 div#now-playing{
 	display: inline-block;
@@ -44,10 +42,6 @@ img[amplitude-song-info="cover_art_url"]{
 	height:100%;
 }
 
-#player-left-bottom{
-	background-color: #F1F1F1;
-	padding: 20px 10px;
-}
 
 span.current-time{
 	color: #607D8B;
@@ -57,98 +51,6 @@ span.current-time{
 	width: 15%;
 	text-align: center;
 }
-
-input[type=range].amplitude-song-slider{
-	-webkit-appearance: none;
-	width: 70%;
-	float: left;
-	margin-top: 10px;
-}
-
-
-input[type=range].amplitude-song-slider:focus {
-	outline: none;
-}
-
-input[type=range].amplitude-song-slider::-webkit-slider-runnable-track {
-	width: 75%;
-	height: 1px;
-	cursor: pointer;
-	animate: 0.2s;
-	background: #CFD8DC;
-}
-
-input[type=range].amplitude-song-slider::-webkit-slider-thumb {
-	height: 20px;
-	width: 20px;
-	border-radius: 10px;
-	background: #00A0FF;
-	cursor: pointer;
-	margin-top: -8px;
-	-webkit-appearance: none;
-}
-
-input[type=range].amplitude-song-slider:focus::-webkit-slider-runnable-track {
-	background: #CFD8DC;
-}
-
-input[type=range].amplitude-song-slider::-moz-range-track {
-	width: 100%;
-	height: 1px;
-	cursor: pointer;
-	animate: 0.2s;
-	background: #CFD8DC;
-}
-
-input[type=range].amplitude-song-slider::-moz-range-thumb {
-	height: 20px;
-	width: 20px;
-	border-radius: 10px;
-	background: #00A0FF;
-	cursor: pointer;
-	margin-top: -8px;
-}
-
-input[type=range].amplitude-song-slider::-ms-track {
-	width: 100%;
-	height: 1px;
-	cursor: pointer;
-	animate: 0.2s;
-	background: #CFD8DC;
-}
-
-input[type=range].amplitude-song-slider::-ms-fill-lower {
-	background: #CFD8DC;
-	border-radius: 2.6px;
-}
-
-input[type=range].amplitude-song-slider::-ms-fill-upper {
-	background: #CFD8DC;
-	border-radius: 2.6px;
-}
-
-input[type=range].amplitude-song-slider::-ms-thumb {
-	height: 20px;
-	width: 20px;
-	border-radius: 10px;
-	background: #00A0FF;
-	cursor: pointer;
-	margin-top: 4px;
-}
-
-input[type=range].amplitude-song-slider:focus::-ms-fill-lower {
-	background: #CFD8DC;
-}
-
-input[type=range].amplitude-song-slider:focus::-ms-fill-upper {
-	background: #CFD8DC;
-}
-
-input[type=range].amplitude-song-slider::-ms-tooltip {
-	display: none;
-}
-
-#time-container{ background:orange;}
 
 #time-container .duration{
 	color: #607D8B;
@@ -165,12 +67,20 @@ input[type=range].amplitude-song-slider::-ms-tooltip {
 	clear: both;
 }
 
+input[type=range].amplitude-song-slider{
+	-webkit-appearance: none;
+	width: 70%;
+	float: left;
+	margin:10px 0 12px 0;
+}
 
 
 #central-controls{
-	width: 130px;
-	margin: auto;
-	background:#FF8800;
+	width:100%;
+}
+#central-controls-grouped{
+	width:130px;
+	margin:0 auto;
 }
 
 #previous{
@@ -221,8 +131,6 @@ input[type=range].amplitude-song-slider::-ms-tooltip {
 
 #meta-container{
 	text-align: center;
-	margin-top: 5px;
-	background:yellow;
 }
 
 span.song-name{
@@ -233,7 +141,6 @@ span.song-name{
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	background:beige;
 }
 
 div.song-artist-album{
@@ -245,7 +152,6 @@ div.song-artist-album{
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	background:tan;
 }
 
 div.song-artist-album span{
@@ -256,7 +162,6 @@ div.song-artist-album span{
 div.song{
 	cursor: pointer;
 	padding: 10px;
-	background:brown;
 }
 
 div.song-now-playing-icon-container{
@@ -264,7 +169,6 @@ div.song-now-playing-icon-container{
 	width: 20px;
 	height: 20px;
 	margin-right: 10px;
-	background:orange;
 }
 
 div.play-button-container{
@@ -274,7 +178,6 @@ div.play-button-container{
 	height: 22px;
 	margin-top: 10px;
 	opacity:50%;
-	background:blue;
 }
 
 div.play-button-container:hover{
@@ -300,16 +203,6 @@ span.song-title{
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-span.song-artist{
-	color: #607D8B;
-	font-size: 14px;
-	font-weight: bold;
-	text-transform: uppercase;
-	display: block;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
 
 span.song-duration{
 	float: left;
@@ -327,14 +220,20 @@ div.song:after{
 	clear: both;
 }
 
-#cover-art-container, #time-container, #central-controls, #meta-container {
+#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
 	width:50%;
 	float:left;
 }
+#time-container, #central-controls, #meta-container{
+	background:#f1f1f1;
+}
+
 /* Small only */
 @media screen and (max-width: 39.9375em) {
 
-
+#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
+	width:100%;
+}
 
 
 }
@@ -400,9 +299,11 @@ if (!$iOSDevice) {
 
 
 <div id="central-controls">
-	<div class="amplitude-prev" id="previous"></div>
-	<div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
-	<div class="amplitude-next" id="next"></div>
+	<div id="central-controls-grouped">
+		<div class="amplitude-prev" id="previous"></div>
+		<div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
+		<div class="amplitude-next" id="next"></div>
+	</div>
 </div>
 
 <div id="meta-container">
@@ -414,49 +315,47 @@ if (!$iOSDevice) {
 	</div>
 </div>
 
+<div id="list-container">
 
 <?php
 if (!$iOSDevice) {
 ?>
-						<div><button type="button" class="download" name="t" value="0">Download all</button></div>
+	<div><button type="button" class="download" name="t" value="0">Download all</button></div>
 <?php
 }
 
 $trackIndex = 0;
 foreach ($tracks as $track) {
 ?>
-						<div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="<?php echo $trackIndex++; ?>">
-							<div class="song-now-playing-icon-container">
-								<div class="play-button-container">
+	<div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="<?php echo $trackIndex++; ?>">
+		<div class="song-now-playing-icon-container">
+			<div class="play-button-container">
 
-								</div>
-								<div class="now-playing"></div>
-							</div>
-							<div class="song-meta-data">
-								<span class="track-number"><?php echo htmlspecialchars($track['trackNumber']); ?></span>.
-								<span class="song-title"><?php echo htmlspecialchars($track['title']); ?></span>
-							</div>
-							<span class="song-duration"><?php echo htmlspecialchars($track['duration']); ?></span>
+			</div>
+			<div class="now-playing"></div>
+		</div>
+		<div class="song-meta-data">
+			<span class="track-number"><?php echo htmlspecialchars($track['trackNumber']); ?></span>.
+			<span class="song-title"><?php echo htmlspecialchars($track['title']); ?></span>
+		</div>
+		<span class="song-duration"><?php echo htmlspecialchars($track['duration']); ?></span>
 <?php
-	if (!$iOSDevice) {
+if (!$iOSDevice) {
 ?>
-							<div class="song-download">
-								<button type="button" class="download" name="t" value="<?php echo $track['ID']; ?>">Download</button>
-								<?php echo htmlspecialchars($track['fileBase']); ?>
+		<div class="song-download">
+			<button type="button" class="download" name="t" value="<?php echo $track['ID']; ?>">Download</button>
+			<?php echo htmlspecialchars($track['fileBase']); ?>
 
-							</div>
+		</div>
 <?php
 	}
 ?>
-
-						</div>
+	</div>
 <?php
 }
 ?>
-					</div>
-				</div>
-			</div>
-		</div>
+</div> <!-- list-container -->
+
 	</form>
 </div> <!-- redeem_console -->
 
@@ -523,7 +422,6 @@ foreach ($tracks as $track) {
 	jQuery('.song').on('mouseover', function(){
 		jQuery(this).css('background-color', '#00A0FF');
 		jQuery(this).find('.song-meta-data .song-title').css('color', '#FFFFFF');
-		jQuery(this).find('.song-meta-data .song-artist').css('color', '#FFFFFF');
 
 		if( !jQuery(this).hasClass('amplitude-active-song-container') ){
 			jQuery(this).find('.play-button-container').css('display', 'block');
@@ -538,7 +436,6 @@ foreach ($tracks as $track) {
 	jQuery('.song').on('mouseout', function(){
 		jQuery(this).css('background-color', '');
 		jQuery(this).find('.song-meta-data .song-title').css('color', '');
-		jQuery(this).find('.song-meta-data .song-artist').css('color', '');
 		jQuery(this).find('.play-button-container').css('display', 'none');
 		jQuery(this).find('.song-duration').css('color', '');
 	});
