@@ -1,5 +1,7 @@
 /* General stuff */
 
+body { font-family:'Gill Sans';}
+
 img[amplitude-song-info="cover_art_url"]{
 	width: 100%;
 	height:100%;
@@ -111,7 +113,10 @@ div.song-artist-album span{
 	display: block;
 }
 
-/* Slider Fu … not messing with this! */
+/*******************************************************************
+ Slider Fu … not messing with this!
+ *******************************************************************/
+
 
 input[type=range].amplitude-song-slider:focus {
 	outline: none;
@@ -195,9 +200,16 @@ input[type=range].amplitude-song-slider::-ms-tooltip {
 	display: none;
 }
 
+/*******************************************************************
+ End Slider Fu
+ *******************************************************************/
 
 
-body { font-family:'Gill Sans';}
+
+
+
+
+
 
 div#now-playing{
 	display: inline-block;
