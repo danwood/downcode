@@ -2,10 +2,37 @@
 
 body { font-family:'Gill Sans';}
 
+
+/* Responsive, big containers */
+
+#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
+	width:50%;
+	float:left;
+}
+#time-container, #central-controls, #meta-container{
+	background:#f1f1f1;
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+
+	#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
+		width:100%;
+	}
+}
+
+/*******************************************************************
+ #cover-art-container
+ *******************************************************************/
+
 img[amplitude-song-info="cover_art_url"]{
 	width: 100%;
 	height:100%;
 }
+
+/*******************************************************************
+ #time-container
+ *******************************************************************/
 
 span.current-time{
 	color: #607D8B;
@@ -37,6 +64,11 @@ input[type=range].amplitude-song-slider{
 	float: left;
 	margin:10px 0 12px 0;
 }
+
+/*******************************************************************
+ #central-controls
+ *******************************************************************/
+
 
 #central-controls{
 	width:100%;
@@ -86,6 +118,13 @@ input[type=range].amplitude-song-slider{
 	margin-left: -5px;
 }
 
+
+
+
+/*******************************************************************
+ #meta-container
+ *******************************************************************/
+
 #meta-container{
 	text-align: center;
 }
@@ -112,6 +151,87 @@ div.song-artist-album{
 div.song-artist-album span{
 	display: block;
 }
+
+/*******************************************************************
+ #list-container
+ *******************************************************************/
+
+div#now-playing{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background-color:red;
+	background: url('data:image/svg+xml;charset=UTF-8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><circle fill="#00A0FF" cx="10" cy="10" r="10"/><path d="M8.9 12.13c-.1 0-.2-.03-.27-.09l-1.6-1.16H5.48a.47.47 0 0 1-.47-.46V8.85c0-.25.2-.46.47-.47h1.55l1.59-1.3a.5.5 0 0 1 .3-.1c.26 0 .47.2.47.47v4.22c0 .26-.21.46-.47.46zm1.87-.3l-.45-.44a2.8 2.8 0 0 0 0-3.51l.45-.44a3.42 3.42 0 0 1 0 4.4zm1.21 1.22l-.44-.44a4.5 4.5 0 0 0 0-5.95l.44-.44a5.13 5.13 0 0 1 0 6.83zm1.22 1.22l-.44-.44a6.22 6.22 0 0 0 0-8.39L13.2 5a6.85 6.85 0 0 1 0 9.27z" fill="#FFF"/></g></svg>');
+}
+
+div.song{
+	cursor: pointer;
+	padding: 10px;
+}
+
+div.song-now-playing-icon-container{
+	float: left;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+}
+
+div.play-button-container{
+	display: none;
+	background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"><path d="M7.24 5.04v11.78l9.82-5.6-9.82-6.18z" fill="#FFF"/><ellipse cx="11" cy="11" rx="10.5" ry="10.5" stroke="#FFF" stroke-linecap="square" fill="none"/></svg>');
+	width: 22px;
+	height: 22px;
+	margin-top: 10px;
+	opacity:50%;
+}
+
+div.play-button-container:hover{
+	opacity:100%;
+}
+
+div.song.amplitude-active-song-container div.song-now-playing-icon-container div.now-playing{
+	display: block;
+}
+
+div.song.amplitude-active-song-container div.song-now-playing-icon-container:hover div.now-playing div.play-button-container{
+	display: none;
+}
+
+div.song-meta-data{
+	float: left;
+	width: calc( 100% - 200px );
+}
+div.song-download {
+	float:left;
+	width:100px;
+}
+span.song-title{
+	color: #272726;
+	font-size: 16px;
+	display: block;
+	font-weight: 300;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+span.song-duration, span.track-number{
+	float: left;
+	width: 55px;
+	text-align: center;
+	color: #607D8B;
+	font-size: 16px;
+	font-weight: 500;
+}
+
+div.song:after{
+	content: "";
+	display: table;
+	clear: both;
+}
+
+
+
 
 /*******************************************************************
  Slider Fu … not messing with this!
@@ -204,104 +324,4 @@ input[type=range].amplitude-song-slider::-ms-tooltip {
  End Slider Fu
  *******************************************************************/
 
-
-
-
-
-
-
-
-div#now-playing{
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	background-color:red;
-	background: url('data:image/svg+xml;charset=UTF-8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><circle fill="#00A0FF" cx="10" cy="10" r="10"/><path d="M8.9 12.13c-.1 0-.2-.03-.27-.09l-1.6-1.16H5.48a.47.47 0 0 1-.47-.46V8.85c0-.25.2-.46.47-.47h1.55l1.59-1.3a.5.5 0 0 1 .3-.1c.26 0 .47.2.47.47v4.22c0 .26-.21.46-.47.46zm1.87-.3l-.45-.44a2.8 2.8 0 0 0 0-3.51l.45-.44a3.42 3.42 0 0 1 0 4.4zm1.21 1.22l-.44-.44a4.5 4.5 0 0 0 0-5.95l.44-.44a5.13 5.13 0 0 1 0 6.83zm1.22 1.22l-.44-.44a6.22 6.22 0 0 0 0-8.39L13.2 5a6.85 6.85 0 0 1 0 9.27z" fill="#FFF"/></g></svg>');
-}
-
-
-
-
-
-div.song{
-	cursor: pointer;
-	padding: 10px;
-}
-
-div.song-now-playing-icon-container{
-	float: left;
-	width: 20px;
-	height: 20px;
-	margin-right: 10px;
-}
-
-div.play-button-container{
-	display: none;
-	background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"><path d="M7.24 5.04v11.78l9.82-5.6-9.82-6.18z" fill="#FFF"/><ellipse cx="11" cy="11" rx="10.5" ry="10.5" stroke="#FFF" stroke-linecap="square" fill="none"/></svg>');
-	width: 22px;
-	height: 22px;
-	margin-top: 10px;
-	opacity:50%;
-}
-
-div.play-button-container:hover{
-	opacity:100%;
-}
-
-div.song.amplitude-active-song-container div.song-now-playing-icon-container div.now-playing{
-	display: block;
-}
-div.song.amplitude-active-song-container div.song-now-playing-icon-container:hover div.now-playing div.play-button-container{
-	display: none;
-}
-div.song-meta-data{
-	float: left;
-	width: calc( 100% - 200px );
-}
-div.song-download {
-	float:left;
-	width:100px;
-}
-span.song-title{
-	color: #272726;
-	font-size: 16px;
-	display: block;
-	font-weight: 300;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-span.song-duration, span.track-number{
-	float: left;
-	width: 55px;
-	text-align: center;
-	color: #607D8B;
-	font-size: 16px;
-	font-weight: 500;
-}
-
-div.song:after{
-	content: "";
-	display: table;
-	clear: both;
-}
-
-/* Responsive, big containers */
-
-#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
-	width:50%;
-	float:left;
-}
-#time-container, #central-controls, #meta-container{
-	background:#f1f1f1;
-}
-
-/* Small only */
-@media screen and (max-width: 39.9375em) {
-
-	#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
-		width:100%;
-	}
-}
 

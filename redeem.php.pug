@@ -94,29 +94,31 @@ html(lang="en-us")
 					button.download(type="button" name="t" value="0") Download all
 				|<?php
 				|}
-				|
-				|$trackIndex = 0;
-				|foreach ($tracks as $track) {
 				|?>
-				.song.amplitude-song-container.amplitude-play-pause(amplitude-song-index!="<?php echo $trackIndex++; ?>")
-					.song-now-playing-icon-container
-						.play-button-container
-						.now-playing
-					.song-meta-data
-						span.track-number <?php echo htmlspecialchars($track['trackNumber']); ?>.
-						span.song-title <?php echo htmlspecialchars($track['title']); ?>
-					span.song-duration <?php echo htmlspecialchars($track['duration']); ?>
+				#list-container
 					|<?php
-					|	if (!$iOSDevice) {
+					|$trackIndex = 0;
+					|foreach ($tracks as $track) {
 					|?>
-					.song-download
-						button.download(type="button" name="t" value!="<?php echo $track['ID']; ?>") Download
+					.song.amplitude-song-container.amplitude-play-pause(amplitude-song-index!="<?php echo $trackIndex++; ?>")
+						.song-now-playing-icon-container
+							.play-button-container
+							.now-playing
+						.song-meta-data
+							span.track-number <?php echo htmlspecialchars($track['trackNumber']); ?>.
+							span.song-title <?php echo htmlspecialchars($track['title']); ?>
+						span.song-duration <?php echo htmlspecialchars($track['duration']); ?>
+						|<?php
+						|	if (!$iOSDevice) {
+						|?>
+						.song-download
+							button.download(type="button" name="t" value!="<?php echo $track['ID']; ?>") Download
+						|<?php
+						|	}
+						|?>
 					|<?php
-					|	}
+					|}
 					|?>
-				|<?php
-				|}
-				|?>
 
 
 
