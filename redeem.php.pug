@@ -93,7 +93,7 @@ html(lang="en-us")
 						|}
 						|?>
 					|<?php
-					|if (!$iOSDevice) {
+					|	if (!$iOSDevice) {
 					|?>
 					span.song-download
 						button.download(type="button" name="t" value="0") Download all
@@ -175,32 +175,32 @@ html(lang="en-us")
 			/*
 				Ensure that on mouseover, CSS styles don't get messed up for active songs.
 			*/
-			jQuery('.song').on('mouseover', function(){
-				jQuery(this).css('background-color', '#00A0FF');
-				jQuery(this).find('.song-meta-data *').css('color', '#FFFFFF');
+			$('.song').on('mouseover', function(){
+				$(this).css('background-color', '#00A0FF');
+				$(this).find('.song-meta-data *').css('color', '#FFFFFF');
 
-				if( !jQuery(this).hasClass('amplitude-active-song-container') ){
-					jQuery(this).find('.play-button-container').css('display', 'block');
+				if( !$(this).hasClass('amplitude-active-song-container') ){
+					$(this).find('.play-button-container').css('display', 'block');
 				}
 
-				jQuery(this).find('.song-duration').css('color', '#FFFFFF');
+				$(this).find('.song-duration').css('color', '#FFFFFF');
 			});
 
 			/*
 				Ensure that on mouseout, CSS styles don't get messed up for active songs.
 			*/
-			jQuery('.song').on('mouseout', function(){
-				jQuery(this).css('background-color', '');
-				jQuery(this).find('.song-meta-data *').css('color', '');
-				jQuery(this).find('.play-button-container').css('display', 'none');
-				jQuery(this).find('.song-duration').css('color', '');
+			$('.song').on('mouseout', function(){
+				$(this).css('background-color', '');
+				$(this).find('.song-meta-data *').css('color', '');
+				$(this).find('.play-button-container').css('display', 'none');
+				$(this).find('.song-duration').css('color', '');
 			});
 
 			/*
 				Show and hide the play button container on the song when the song is clicked.
 			*/
-			jQuery('.song').on('click', function(){
-				jQuery(this).find('.play-button-container').css('display', 'none');
+			$('.song').on('click', function(){
+				$(this).find('.play-button-container').css('display', 'none');
 			});
 
 			if (window.DeviceMotionEvent==undefined) {
