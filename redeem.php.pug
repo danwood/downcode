@@ -23,8 +23,7 @@
 doctype
 html(lang="en-us")
 	head
-		style
-			include redeem.css
+		<link rel="stylesheet" href="redeem.css" />
 	body
 		<?php if (!$album) { ?>
 			p.
@@ -36,38 +35,13 @@ html(lang="en-us")
 		div#redeem_console
 			h1 <?php echo htmlspecialchars($album['title']); ?>
 			p <?php echo htmlspecialchars($album['description']); ?>
+			#cover-art-container
+				#cover-art
+					img(amplitude-song-info="cover_art_url", amplitude-main-song-info="true")
 			form#downloader
 				input(type="hidden" id="a_input" name="a" value!="<?php echo $album['ID']; ?>")
 				input(type="hidden" id="c_input" name="c" value!="<?php echo $code; ?>")
 
-
-				|<?php
-				|if (!$iOSDevice) {
-				|	echo '<h2>Format:</h2>' . PHP_EOL;
-				|	echo '<select id="f_input" name="f">' . PHP_EOL;
-				|	$formats = $db->formats();
-				|	foreach ($formats as $format) {
-				|		echo '<option value="' . $format['ID'] . '"';
-				|		echo ' data-extension="' . $format['extension'] . '"';
-				|		// not really used, but maybe a script could populate something?
-				|		if (isset($album['formatID']) && $album['formatID'] == $format['ID']) {
-				|			echo ' data-previous-format="' . $album['formatID'] . '" selected';
-				|		}
-				|		else if (!isset($album['formatID'])
-				|			&& isset($format['platform_preg'])
-				|			&& preg_match($format['platform_preg'], $userAgent, $matches)) {
-				|			echo ' data-platform="' . $matches[0] . '" selected';
-				|		}
-				|		echo '>' . htmlspecialchars($format['description']) . '</option>' . PHP_EOL;
-				|	}
-				|	echo '</select>' . PHP_EOL;
-				|}
-				|?>
-
-				// Player Console
-
-				#cover-art-container
-					img(amplitude-song-info="cover_art_url", amplitude-main-song-info="true")
 				#time-container
 					span.current-time
 						span.amplitude-current-minutes(amplitude-main-current-minutes="true")
@@ -79,9 +53,10 @@ html(lang="en-us")
 						| :
 						span.amplitude-duration-seconds(amplitude-main-duration-seconds="true")
 				#central-controls
-					#previous.amplitude-prev
-					#play-pause.amplitude-play-pause(amplitude-main-play-pause="true")
-					#next.amplitude-next
+					#central-controls-grouped
+						#previous.amplitude-prev
+						#play-pause.amplitude-play-pause(amplitude-main-play-pause="true")
+						#next.amplitude-next
 				#meta-container
 					span.song-name(amplitude-song-info="name", amplitude-main-song-info="true")
 					.song-artist-album
@@ -90,12 +65,35 @@ html(lang="en-us")
 				|<?php
 				|if (!$iOSDevice) {
 				|?>
-				div
-					button.download(type="button" name="t" value="0") Download all
 				|<?php
 				|}
 				|?>
 				#list-container
+					span#format-container
+						|<?php
+						|if (!$iOSDevice) {
+						|	echo 'Format: ';
+						|	echo '<select id="f_input" name="f">' . PHP_EOL;
+						|	$formats = $db->formats();
+						|	foreach ($formats as $format) {
+						|		echo '<option value="' . $format['ID'] . '"';
+						|		echo ' data-extension="' . $format['extension'] . '"';
+						|		// not really used, but maybe a script could populate something?
+						|		if (isset($album['formatID']) && $album['formatID'] == $format['ID']) {
+						|			echo ' data-previous-format="' . $album['formatID'] . '" selected';
+						|		}
+						|		else if (!isset($album['formatID'])
+						|			&& isset($format['platform_preg'])
+						|			&& preg_match($format['platform_preg'], $userAgent, $matches)) {
+						|			echo ' data-platform="' . $matches[0] . '" selected';
+						|		}
+						|		echo '>' . htmlspecialchars($format['description']) . '</option>' . PHP_EOL;
+						|	}
+						|	echo '</select>' . PHP_EOL;
+						|}
+						|?>
+					span.song-download
+						button.download(type="button" name="t" value="0") Download all
 					|<?php
 					|$trackIndex = 0;
 					|foreach ($tracks as $track) {

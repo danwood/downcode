@@ -2,28 +2,80 @@
 
 body { font-family:'Gill Sans';}
 
+body { margin:0; box-sizing:content-box;}
 
 /* Responsive, big containers */
 
-#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
-	width:50%;
+#redeem_console {
+	padding:20px;
+}
+
+#redeem_console:after{
+	content: "";
+	display: table;
+	clear: both;
+}
+
+#cover-art-container {
+	width:20%;
 	float:left;
 }
-#time-container, #central-controls, #meta-container{
-	background:#f1f1f1;
+#downloader {
+	width:80%;
+	float:left;
 }
+
+
+/*
+
+#redeem_console {
+	background:gray;
+}
+
+
+#cover-art-container
+{
+	background:red;
+}
+
+#time-container
+{
+	background:orange;
+}
+
+#central-controls
+{
+	background:yellow;
+}
+
+#meta-container
+{
+	background:green;
+}
+
+#list-container
+{
+	background:blue;
+}
+
+#format-container {
+	background:rebeccapurple;
+}
+*/
+
 
 /* Small only */
 @media screen and (max-width: 39.9375em) {
 
-	#cover-art-container, #time-container, #central-controls, #meta-container, #list-container {
-		width:100%;
-	}
 }
 
 /*******************************************************************
  #cover-art-container
  *******************************************************************/
+
+#cover-art {
+	margin:20px;
+}
 
 img[amplitude-song-info="cover_art_url"]{
 	width: 100%;
@@ -70,12 +122,15 @@ input[type=range].amplitude-song-slider{
  *******************************************************************/
 
 
-#central-controls{
-	width:100%;
+#central-controls:after{
+	content: "";
+	display: table;
+	clear: both;
 }
+
 #central-controls-grouped{
 	width:130px;
-	margin:0 auto;
+	margin:20px auto 20px auto;
 }
 
 #previous{
@@ -127,6 +182,7 @@ input[type=range].amplitude-song-slider{
 
 #meta-container{
 	text-align: center;
+	margin:20px auto 20px auto;
 }
 
 span.song-name{
@@ -155,6 +211,7 @@ div.song-artist-album span{
 /*******************************************************************
  #list-container
  *******************************************************************/
+
 
 div#now-playing{
 	display: inline-block;
@@ -199,11 +256,11 @@ div.song.amplitude-active-song-container div.song-now-playing-icon-container:hov
 
 div.song-meta-data{
 	float: left;
-	width: calc( 100% - 200px );
+	width: calc( 100% - 13em );
 }
 div.song-download {
 	float:left;
-	width:100px;
+	width:8em;
 }
 span.song-title{
 	color: #272726;
@@ -217,7 +274,7 @@ span.song-title{
 
 span.song-duration, span.track-number{
 	float: left;
-	width: 55px;
+	width: 3em;
 	text-align: center;
 	color: #607D8B;
 	font-size: 16px;
