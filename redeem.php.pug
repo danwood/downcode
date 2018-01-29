@@ -92,9 +92,13 @@ html(lang="en-us")
 						|	echo '</select>' . PHP_EOL;
 						|}
 						|?>
+					|<?php
+					|if (!$iOSDevice) {
+					|?>
 					span.song-download
 						button.download(type="button" name="t" value="0") Download all
 					|<?php
+					|}
 					|$trackIndex = 0;
 					|foreach ($tracks as $track) {
 					|?>
@@ -199,6 +203,9 @@ html(lang="en-us")
 				jQuery(this).find('.play-button-container').css('display', 'none');
 			});
 
+			if (window.DeviceMotionEvent==undefined) {
+				$('.song-download').hide();
+			}
 
 |
 |<?php
