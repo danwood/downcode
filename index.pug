@@ -10,6 +10,7 @@
 doctype
 html
     head
+        title TEST
         style.
             .redeem {
                 background-color:#bdbdbd;
@@ -94,7 +95,7 @@ html
             form#redeem-form
                 input#redeem-input(type="text" name="code" pattern="[A-Za-z0-9- ]+{6,12}$" value!="<?php echo htmlspecialchars($code); ?>")
                 input(type="hidden" name="email" value!="<?php echo htmlspecialchars($email); ?>")
-                input#redeem-submit(type="submit" name="go" value="Submit Download Code" disabled="true")
+                input#redeem-submit(type="submit" name="go" value="Submit Download Code" disabled="disabled")
             |<?php
             |if ($iOSDevice) {
             |?>
