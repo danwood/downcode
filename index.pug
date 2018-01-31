@@ -7,42 +7,53 @@
 |$code = isset($_GET['code']) ? htmlspecialchars($_GET['code']) : '';
 |$email = isset($_GET['email']) ? htmlspecialchars($_GET['email']) : '';
 |?>
-doctype
-html
+
+doctype html
+html(class="no-js", lang="en-us")
     head
-        title TEST
+        meta(charset="utf-8")
+        <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge'><![endif]-->
+        title Lorenzo Wood Music — Official Site
+        meta(name="description"
+            content="Lorenzo Wood is a young musician from Alameda, California USA. He sings, plays guitar, drums, keyboards, etc. He also writes and produces original songs.")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover")
+        link(rel="apple-touch-icon" href="icon.png")
+        link(rel="stylesheet" href="css/main.css")
+        link(rel="prefetch" href="//code.jquery.com")
+        link(rel="prefetch" href="//w.soundcloud.com")
+        link(rel="prefetch" href="//www.youtube.com")
+        link(rel="prefetch" href="//widget.bandsintown.com")
+
         style.
             .redeem {
-                background-color:#bdbdbd;
-                color:white;
-                padding:1em;
-                margin-top:-30px;
             }
 
             @media only screen and (min-width: 500px) {
 
                 .redeem {
-                    float:right;
-                    width:16em;
-                    margin:0 1em 0.5em 1.5em;
+                    display:inline-block;
                 }
             }
 
             .redeem input {
-                width:100%;
+                width:10em;
                 color:black;
                 font-size:120%;
-                background: #f5f5f5;
+                background: #FFF;
+                font:normal 16px impact, sans-serif;
+                letter-spacing:1px;
+                text-transform:uppercase;
             }
 
             .redeem input[type=submit] {
+                width:auto;
                 border-radius: 28px;
                 text-shadow: 0px 1px 3px #666666;
                 color: #ffffff;
                 background: #3498db;
                 padding: 5px 20px;
                 border:none;
-                margin-top:10px;
+                margin-right:1em;
             }
 
             .redeem input[type=submit]:hover {
@@ -52,7 +63,6 @@ html
               background: #888888;
             }
 
-            body { position: relative; margin:0;}
             #cover {
                 position:absolute;
                 top:0;left:0;
@@ -81,29 +91,16 @@ html
                 box-shadow: 0 0 0 5px rgba(0,0,0,0.999);
             }
             #close-redeem {
-                position:fixed;
+                position:absolute;
                 top:0;
                 right:40px;
+                height:100%;
                 font-size:600%;
                 color:white;
                 z-index:1011;
             }
 
-    // just before section.bio
     body
-        aside.redeem
-            form#redeem-form
-                input#redeem-input(type="text" name="code" pattern="[A-Za-z0-9- ]+{6,12}$" value!="<?php echo htmlspecialchars($code); ?>")
-                input(type="hidden" name="email" value!="<?php echo htmlspecialchars($email); ?>")
-                input#redeem-submit(type="submit" name="go" value="Submit Download Code" disabled="disabled")
-            |<?php
-            |if ($iOSDevice) {
-            |?>
-            .warning.
-                Music tracks can be played but not downloaded on the <?php echo htmlspecialchars($iOSDevice); ?>.
-            |<?php
-            |}
-            |?>
 
 
 
@@ -111,6 +108,19 @@ html
         // jquery already loaded
         script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
 
+            aside.redeem
+                form#redeem-form
+                    input#redeem-input(type="text" name="code" placeholder="Download Code" pattern="[A-Za-z0-9- ]+{6,12}$" value!="<?php echo htmlspecialchars($code); ?>")
+                    input(type="hidden" name="email" value!="<?php echo htmlspecialchars($email); ?>")
+                    input#redeem-submit(type="submit" name="go" value="Submit Download Code" disabled="disabled")
+                |<?php
+                |if ($iOSDevice) {
+                |?>
+                .warning.
+                    Music tracks can be played but not downloaded on the <?php echo htmlspecialchars($iOSDevice); ?>.
+                |<?php
+                |}
+                |?>
 
         // just before scripts
 
@@ -133,7 +143,7 @@ html
                             $('#cover').show();
                             $('#redeemer').show();
                             $('#close-redeem').show();
-                            $('#redeemer').html(data);  // We're done; let the content here do the rest.
+                            $('#redeemer').html(data);  // We’re done; let the content here do the rest.
                         } else {
                             alert('Sorry, but the code you entered has already been redeemed or was entered incorrectly.');
                             $('#redeem-input').focus();
